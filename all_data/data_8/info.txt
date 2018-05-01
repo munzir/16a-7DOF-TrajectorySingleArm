@@ -1,0 +1,14 @@
+Apr 30 Monday
+Data collection for training (trial 1)
+
+Each joint's error has been scaled correspondingly. Reducing error degradation.
+Joint 1 -  30
+Joint 2 -  10
+Joint 3 -   5
+Joint 4 -   5
+Joint 5 -   3
+Joint 6 -   5
+Joint 7 -   1
+
+Run for "1" times the time period
+Additionally, including ddq, M, Cg, and Error data
