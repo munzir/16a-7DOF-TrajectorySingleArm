@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named operationalSpaceControl
+# Target rules for targets named collectData
 
 # Build rule for target.
-operationalSpaceControl: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 operationalSpaceControl
-.PHONY : operationalSpaceControl
+collectData: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 collectData
+.PHONY : collectData
 
 # fast build rule for target.
-operationalSpaceControl/fast:
-	$(MAKE) -f CMakeFiles/operationalSpaceControl.dir/build.make CMakeFiles/operationalSpaceControl.dir/build
-.PHONY : operationalSpaceControl/fast
+collectData/fast:
+	$(MAKE) -f CMakeFiles/collectData.dir/build.make CMakeFiles/collectData.dir/build
+.PHONY : collectData/fast
 
 Controller.o: Controller.cpp.o
 
@@ -129,7 +129,7 @@ Controller.o: Controller.cpp.o
 
 # target to build an object file
 Controller.cpp.o:
-	$(MAKE) -f CMakeFiles/operationalSpaceControl.dir/build.make CMakeFiles/operationalSpaceControl.dir/Controller.cpp.o
+	$(MAKE) -f CMakeFiles/collectData.dir/build.make CMakeFiles/collectData.dir/Controller.cpp.o
 .PHONY : Controller.cpp.o
 
 Controller.i: Controller.cpp.i
@@ -138,7 +138,7 @@ Controller.i: Controller.cpp.i
 
 # target to preprocess a source file
 Controller.cpp.i:
-	$(MAKE) -f CMakeFiles/operationalSpaceControl.dir/build.make CMakeFiles/operationalSpaceControl.dir/Controller.cpp.i
+	$(MAKE) -f CMakeFiles/collectData.dir/build.make CMakeFiles/collectData.dir/Controller.cpp.i
 .PHONY : Controller.cpp.i
 
 Controller.s: Controller.cpp.s
@@ -147,7 +147,7 @@ Controller.s: Controller.cpp.s
 
 # target to generate assembly for a file
 Controller.cpp.s:
-	$(MAKE) -f CMakeFiles/operationalSpaceControl.dir/build.make CMakeFiles/operationalSpaceControl.dir/Controller.cpp.s
+	$(MAKE) -f CMakeFiles/collectData.dir/build.make CMakeFiles/collectData.dir/Controller.cpp.s
 .PHONY : Controller.cpp.s
 
 Main.o: Main.cpp.o
@@ -156,7 +156,7 @@ Main.o: Main.cpp.o
 
 # target to build an object file
 Main.cpp.o:
-	$(MAKE) -f CMakeFiles/operationalSpaceControl.dir/build.make CMakeFiles/operationalSpaceControl.dir/Main.cpp.o
+	$(MAKE) -f CMakeFiles/collectData.dir/build.make CMakeFiles/collectData.dir/Main.cpp.o
 .PHONY : Main.cpp.o
 
 Main.i: Main.cpp.i
@@ -165,7 +165,7 @@ Main.i: Main.cpp.i
 
 # target to preprocess a source file
 Main.cpp.i:
-	$(MAKE) -f CMakeFiles/operationalSpaceControl.dir/build.make CMakeFiles/operationalSpaceControl.dir/Main.cpp.i
+	$(MAKE) -f CMakeFiles/collectData.dir/build.make CMakeFiles/collectData.dir/Main.cpp.i
 .PHONY : Main.cpp.i
 
 Main.s: Main.cpp.s
@@ -174,7 +174,7 @@ Main.s: Main.cpp.s
 
 # target to generate assembly for a file
 Main.cpp.s:
-	$(MAKE) -f CMakeFiles/operationalSpaceControl.dir/build.make CMakeFiles/operationalSpaceControl.dir/Main.cpp.s
+	$(MAKE) -f CMakeFiles/collectData.dir/build.make CMakeFiles/collectData.dir/Main.cpp.s
 .PHONY : Main.cpp.s
 
 MyWindow.o: MyWindow.cpp.o
@@ -183,7 +183,7 @@ MyWindow.o: MyWindow.cpp.o
 
 # target to build an object file
 MyWindow.cpp.o:
-	$(MAKE) -f CMakeFiles/operationalSpaceControl.dir/build.make CMakeFiles/operationalSpaceControl.dir/MyWindow.cpp.o
+	$(MAKE) -f CMakeFiles/collectData.dir/build.make CMakeFiles/collectData.dir/MyWindow.cpp.o
 .PHONY : MyWindow.cpp.o
 
 MyWindow.i: MyWindow.cpp.i
@@ -192,7 +192,7 @@ MyWindow.i: MyWindow.cpp.i
 
 # target to preprocess a source file
 MyWindow.cpp.i:
-	$(MAKE) -f CMakeFiles/operationalSpaceControl.dir/build.make CMakeFiles/operationalSpaceControl.dir/MyWindow.cpp.i
+	$(MAKE) -f CMakeFiles/collectData.dir/build.make CMakeFiles/collectData.dir/MyWindow.cpp.i
 .PHONY : MyWindow.cpp.i
 
 MyWindow.s: MyWindow.cpp.s
@@ -201,7 +201,7 @@ MyWindow.s: MyWindow.cpp.s
 
 # target to generate assembly for a file
 MyWindow.cpp.s:
-	$(MAKE) -f CMakeFiles/operationalSpaceControl.dir/build.make CMakeFiles/operationalSpaceControl.dir/MyWindow.cpp.s
+	$(MAKE) -f CMakeFiles/collectData.dir/build.make CMakeFiles/collectData.dir/MyWindow.cpp.s
 .PHONY : MyWindow.cpp.s
 
 # Help Target
@@ -212,7 +212,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... operationalSpaceControl"
+	@echo "... collectData"
 	@echo "... Controller.o"
 	@echo "... Controller.i"
 	@echo "... Controller.s"
