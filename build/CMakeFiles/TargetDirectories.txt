@@ -1,3 +1,0 @@
-/home/mouhyemen/desktop/research/KrangDart/TrajectorySingleArm/build/CMakeFiles/edit_cache.dir
-/home/mouhyemen/desktop/research/KrangDart/TrajectorySingleArm/build/CMakeFiles/rebuild_cache.dir
-/home/mouhyemen/desktop/research/KrangDart/TrajectorySingleArm/build/CMakeFiles/collectData.dir
