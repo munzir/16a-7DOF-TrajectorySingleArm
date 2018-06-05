@@ -1,6 +1,6 @@
 #exclude contents in matlab and data folders
 
-matlab/
+matlab
 data/*
 coefficients.*
 build/*
