@@ -17,6 +17,8 @@ fstream
 -
 stdlib.h
 -
+iomanip
+-
 
 /home/mouhyemen/desktop/research/KrangDart/TrajectorySingleArm/Controller.hpp
 Eigen/Eigen
