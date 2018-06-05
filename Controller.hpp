@@ -7,6 +7,7 @@
 #include <dart/dart.hpp>
 using namespace std;
 #define DOF 7
+#define TOTAL 5
 
 /// \brief Operational space controller for 6-dof manipulator
 class Controller
@@ -44,15 +45,21 @@ private:
   ofstream dataM;
   ofstream dataCg;
   ofstream dataError;
+  ofstream info;
+  ofstream dataEE_xyz;
 
   /// Variables for calculating reference (optical) trajectories
   double mTime;
+  double mTime2;
   double dt;
-  double wf;
-  Eigen::Matrix<double, DOF, 1> qref;
-  Eigen::Matrix<double, DOF, 1> dqref;
-  Eigen::Matrix<double, DOF, 1> q0;
-  Eigen::Matrix<double, DOF, 4> a, b;
+  int count = 0;
+  const int totalSet = TOTAL;
+  int set = 0;
+  Eigen::Matrix<double, TOTAL, 1> wf;
+  Eigen::Matrix<double,   DOF, 1> qref;
+  Eigen::Matrix<double,   DOF, 1> dqref;
+  Eigen::Matrix<double, DOF*TOTAL, 1> q0;
+  Eigen::Matrix<double, DOF*TOTAL, 4> a, b;
 
   /// \brief Robot
   dart::dynamics::SkeletonPtr mRobot;
