@@ -16,22 +16,22 @@ Controller::Controller(dart::dynamics::SkeletonPtr _robot,
   : mRobot(_robot),
     mEndEffector(_endEffector)
 {
-  cout << endl << "============= Controller constructor activated =============" << endl << endl;
+  cout<< endl << "============= Controller constructor activated =============" << endl << endl;
   assert(_robot != nullptr);
   assert(_endEffector != nullptr);
 
-  cout << "Getting total degrees of freedom ";
+  cout<< "Getting total degrees of freedom ";
   const int dof = mRobot->getNumDofs();
-  cout << "| DOF = " << dof << endl;
+  cout<< "| DOF = " << dof << endl;
 
   if (dof != DOF) {
-    cout << "DOF do not match with defined constant ... exiting program!" << endl;
+    cout<< "DOF do not match with defined constant ... exiting program!" << endl;
     exit (EXIT_FAILURE);
   }
 
-  cout << "Initializing time ==> ";
+  cout<< "Initializing time ==> ";
   mTime = 0;
-  cout << "t(0) = " << mTime << endl;
+  cout<< "t(0) = " << mTime << endl;
 
   mForces.setZero(DOF);
   mKp = Eigen::Matrix<double, DOF, DOF>::Zero();
@@ -86,8 +86,8 @@ Controller::Controller(dart::dynamics::SkeletonPtr _robot,
   dt = 0.001;
 
   // Define coefficients for sinusoidal, pulsation frequency for q and dq
-  cout << " -------------- " << endl;
-  cout << " Setting coefficients for optical trajectories | ";
+  cout<< " -------------- " << endl;
+  cout<< " Setting coefficients for optical trajectories | ";
 
 
 
@@ -173,8 +173,8 @@ Controller::Controller(dart::dynamics::SkeletonPtr _robot,
         0.26, 0.42, 0.436, 0.436, 0.212, 0.12, 0.436;
 
 
-  // // Values from random URDF
-  // // Used to generate TESTING trajectories
+  // Values from random URDF
+  // Used to generate TESTING trajectories
   // wf << 0.433881552676;
   // a << 0.127, -0.062, 0.464, -0.109,
   //      0.112, -0.647, -0.325, 0.417,
@@ -183,7 +183,7 @@ Controller::Controller(dart::dynamics::SkeletonPtr _robot,
   //     -0.482, -0.377, 0.107, 0.138,
   //      0.074, -0.117, 0.403, -0.085,
   //     -0.417, 0.157, -0.354, 0.346;
-  //
+  
   // b << 0.42, -0.485, 0.196, -0.337,
   //     -0.394, 0.313, -0.357, -0.363,
   //      0.326, -0.278, -0.258, 0.066,
@@ -191,14 +191,14 @@ Controller::Controller(dart::dynamics::SkeletonPtr _robot,
   //     -0.098, 0.291, -0.137, 0.183,
   //     -0.065, 0.069, 0.284, -0.174,
   //     -0.134, -0.364, 0.168, -0.301;
-  //
-  // q0 << -0.203, -0.178, 0.397, 0.105, 0.093, -0.274, -0.204;
+  
+  q0 << -0.203, -0.178, 0.397, 0.105, 0.093, -0.274, -0.204;
 
   mRobot->setPositions(q0.segment(set,DOF));
 
-  cout << "Operation completed!" << endl;
+  cout<< "Operation completed!" << endl;
 
-  cout << endl << "============= Controller constructor successful ============" << endl << endl;
+  cout<< endl << "============= Controller constructor successful ============" << endl << endl;
 }
 
 //==============================================================================
@@ -214,11 +214,11 @@ struct OptParams{
 void printMatrix(Eigen::MatrixXd A){
   for(int i=0; i<A.rows(); i++){
     for(int j=0; j<A.cols(); j++){
-      cout << A(i,j) << ", ";
+      cout<< A(i,j) << ", ";
     }
-    cout << endl;
+    cout<< endl;
   }
-  cout << endl;
+  cout<< endl;
 }
 
 
@@ -229,11 +229,11 @@ double optFunc(const std::vector<double> &x, std::vector<double> &grad, void *my
 
   if (!grad.empty()) {
     Eigen::Matrix<double, DOF, 1> mGrad = optParams->P.transpose()*(optParams->P*X - optParams->b);
-    // cout << "mGrad: " << endl << mGrad << endl << endl;
+    // cout<< "mGrad: " << endl << mGrad << endl << endl;
     Eigen::VectorXd::Map(&grad[0], mGrad.size()) = mGrad;
   }
   double normSquared = pow((optParams->P*X - optParams->b).norm(), 2);
-  // cout << "Norm sq: " << normSquared << endl << endl;
+  // cout<< "Norm sq: " << normSquared << endl << endl;
   return (0.5 * normSquared);
 }
 
@@ -255,12 +255,24 @@ Eigen::MatrixXd error(Eigen::VectorXd dq, const int dof) {
 
 //==============================================================================
 void Controller::update(const Eigen::Vector3d& _targetPosition) {
+
+  mTime  += dt;
+  mTime2 += dt;
+  count  +=  1;
+
+  // Get the stuff that we need
+  M    = mRobot->getMassMatrix();                // n x n
+  Cg    = mRobot->getCoriolisAndGravityForces();  // n x 1
+  q    = mRobot->getPositions();                 // n x 1
+  dq    = mRobot->getVelocities();                // n x 1
+  ddq   = mRobot->getAccelerations();             // n x 1
+
   // const int dof = mRobot->getNumDofs();
   // Compute joint angles & velocities using Pulsed Trajectories
   qref << 0, 0, 0, 0, 0, 0, 0;
   dqref = qref;
 
-  // cout << "Time: " << mTime << endl;
+  // cout<< "Time: " << mTime << endl;
   for (int joint = 0; joint < DOF; joint++) {
     for (int l = 1; l <= 4; l++) {
       qref(joint) = qref(joint) + (a(joint+set*DOF, l-1)/(wf(set)*l))*sin(wf(set)*l*mTime)
@@ -270,17 +282,6 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
     }
   }
   qref = qref + q0.segment(set*DOF,DOF);
-
-  mTime  += dt;
-  mTime2 += dt;
-  count  +=  1;
-
-  // Get the stuff that we need
-  Eigen::MatrixXd  M    = mRobot->getMassMatrix();                // n x n
-  Eigen::VectorXd Cg    = mRobot->getCoriolisAndGravityForces();  // n x 1
-  Eigen::VectorXd  q    = mRobot->getPositions();                 // n x 1
-  Eigen::VectorXd dq    = mRobot->getVelocities();                // n x 1
-  Eigen::VectorXd ddq   = mRobot->getAccelerations();             // n x 1
   Eigen::VectorXd ddqref = -mKp*(q - qref) - mKv*(dq - dqref);    // n x 1
 
   // Get the EE's cartesian coordinate in world frame
@@ -291,15 +292,15 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   OptParams optParams;
   std::vector<double> ddqref_vec(DOF);
   double minf;
-  // cout << "Initialized optimizer variables ... " << endl << endl;
+  // cout<< "Initialized optimizer variables ... " << endl << endl;
 
   // Perform optimization to find joint accelerations
   Eigen::Matrix<double, DOF, DOF> I7 = Eigen::Matrix<double, DOF, DOF>::Identity();
 
-  // cout << "Passing optimizing parameters ... ";
+  // cout<< "Passing optimizing parameters ... ";
   optParams.P = I7;
   optParams.b = ddqref;
-  // cout << "Success !" << endl << endl;
+  // cout<< "Success !" << endl << endl;
 
   opt.set_min_objective(optFunc, &optParams);
   opt.set_xtol_rel(1e-4);
@@ -317,25 +318,30 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   // errCoeff(4,4) =   3.0;    //3.0;       3.0
   // errCoeff(5,5) =  25.0;    //25.0;      5.0
   // errCoeff(6,6) =   1.0;    //1.0;       1.0
-
-  errCoeff(0,0) =  30.0;    //30.0;     30.0
-  errCoeff(1,1) = 200.0;    //200.0;    10.0
-  errCoeff(2,2) =   5.0;    //15.0;      5.0
-  errCoeff(3,3) =   5.0;    //100.0;     5.0
-  errCoeff(4,4) =   3.0;    //3.0;       3.0
-  errCoeff(5,5) =   3.0;    //25.0;      5.0
-  errCoeff(6,6) =   0.0;    //1.0;       1.0
+  errCoeff.setZero();
+  // errCoeff(0,0) =  30.0;    //30.0;     30.0
+  // errCoeff(1,1) = 200.0;    //200.0;    10.0
+  // errCoeff(2,2) =   5.0;    //15.0;      5.0
+  // errCoeff(3,3) =   5.0;    //100.0;     5.0
+  // errCoeff(4,4) =   3.0;    //3.0;       3.0
+  // errCoeff(5,5) =   3.0;    //25.0;      5.0
+  // errCoeff(6,6) =   0.0;    //1.0;       1.0
   Eigen::VectorXd mForceErr = mForces + errCoeff*error(dq, DOF);
 
 
   // Apply the joint space forces to the robot
   mRobot->setForces(mForceErr);
 
-  int sample = 30;
+  // if(count == 3) {
+  //   cout << "LHS: " << mForceErr.transpose() << endl;
+  //   cout << "RHS: " << (M*ddq + Cg).transpose() << endl;
+  // } 
+
+  int sample = 1;
   if (count%sample == 0) {
-    cout << fixed;
-    cout << setprecision(2);
-    cout << "Saving data | Time: " << mTime << " seconds | Sample #: " << count << endl;
+    cout<< fixed;
+    cout<< setprecision(2);
+    cout<< "Saving data | Time: " << mTime << " seconds | Sample #: " << count << endl;
     dataTime    << mTime << endl;
     dataQ       << q.transpose() << endl;
     dataQref    << qref.transpose() << endl;
@@ -354,11 +360,11 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
   if (mTime2 >= 1*T && set < totalSet-1) {
     mTime2 = 0;
     set += 1;
-    cout << "---------- GOING TO NEXT SET --------------" << endl << endl;
+    cout<< "---------- GOING TO NEXT SET --------------" << endl << endl;
   }
   else if (mTime2 >= 1*T && set == totalSet-1) {
-    cout << "No more sets ..." << endl;
-    cout << "Time period met. Stopping data recording ...";
+    cout<< "No more sets ..." << endl;
+    cout<< "Time period met. Stopping data recording ...";
 
     info   << "Type: Training Set" << endl;
     info   << "Error coefficients:\n" << errCoeff << endl;
@@ -374,9 +380,15 @@ void Controller::update(const Eigen::Vector3d& _targetPosition) {
     dataCg.close();
     dataError.close();
     dataEE_xyz.close();
-    cout << "File handles closed!" << endl << endl << endl;
+    cout<< "File handles closed!" << endl << endl << endl;
     exit (EXIT_FAILURE);
   }
+
+  Mlast = M;
+  Cglast = Cg;
+  qlast = q;
+  dqlast = dq;
+  mForceLast = mForceErr;
 }
 
 //==============================================================================

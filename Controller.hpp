@@ -61,6 +61,14 @@ private:
   Eigen::Matrix<double, DOF*TOTAL, 1> q0;
   Eigen::Matrix<double, DOF*TOTAL, 4> a, b;
 
+
+  Eigen::Matrix<double, DOF, DOF>  M, Mlast;
+  Eigen::Matrix<double, DOF, 1> Cg, Cglast;
+  Eigen::Matrix<double, DOF, 1>  q, qlast;
+  Eigen::Matrix<double, DOF, 1> dq, dqlast;
+  Eigen::Matrix<double, DOF, 1> ddq;
+  Eigen::Matrix<double, DOF, 1> mForceLast;
+
   /// \brief Robot
   dart::dynamics::SkeletonPtr mRobot;
 

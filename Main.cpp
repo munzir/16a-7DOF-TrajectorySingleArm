@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
   dart::dynamics::SkeletonPtr ground
       = dl.parseSkeleton("dart://sample/urdf/KR5/ground.urdf");
   dart::dynamics::SkeletonPtr robot
-      = dl.parseSkeleton("/home/mouhyemen/desktop/research/KrangDart/SingleArmQP/krangArm.urdf");
+      = dl.parseSkeleton("/home/panda/myfolder/wholebodycontrol/09-URDF/7DOFArm/singlearm.urdf");
   world->addSkeleton(ground);
   world->addSkeleton(robot);
 
